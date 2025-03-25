@@ -3,6 +3,7 @@
 // </copyright>
 
 using CS3500.Networking;
+using System.Collections.Generic;
 using System.Text;
 
 namespace CS3500.Chatting;
@@ -41,13 +42,23 @@ public partial class ChatServer
             connection.Send("Enter your username: ");
             string username = connection.ReadLine();
             connection.Send("You will be chatting as " + username);
-            connections.Add(connection);
+
+            lock (connection)
+            {
+                connections.Add(connection);
+            }
 
             while ( true )
             {
                 var message = connection.ReadLine( );
 
-                foreach (NetworkConnection c in connections)
+                List<NetworkConnection> connectionsCopy;
+
+                lock (connection)
+                {
+                    connectionsCopy = connections.ToList();
+                }
+                foreach (NetworkConnection c in connectionsCopy)
                 {
                     c.Send($"{username}: {message}");
                 }
