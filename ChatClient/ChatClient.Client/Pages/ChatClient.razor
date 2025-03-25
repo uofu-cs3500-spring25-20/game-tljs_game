@@ -32,7 +32,7 @@
 
     <div class="input-row">
         <label for="message"> Chat: </label>
-        <input id="message" class="@grayedOut" disabled="@(disconnected)" type="text" @onchange="HandleSendMessage" />
+        <input id="message" class="@grayedOut" disabled="@(disconnected)" value = "@message" type="text" @onchange="HandleSendMessage" />
     </div>
     <div class="input-row">
         <div class="input-col">
@@ -82,6 +82,8 @@
     /// All of the messages seen by the server
     /// </summary>
     private List<string> AllMessages = new();
+
+    private string? message;
 
 
     /// <summary>
@@ -144,6 +146,12 @@
         if ( e.Value != null )
         {
             network.Send( $"{e.Value}" );
+            if (message == null) {
+                message = "";
+            }
+            else {
+                message = null!;
+            }
         }
     }
 
