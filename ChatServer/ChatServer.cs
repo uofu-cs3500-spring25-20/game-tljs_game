@@ -12,6 +12,7 @@ namespace CS3500.Chatting;
 /// </summary>
 public partial class ChatServer
 {
+    private static List<NetworkConnection> connections = new();
 
     /// <summary>
     ///   The main program.
@@ -37,11 +38,19 @@ public partial class ChatServer
         // handle all messages until disconnect.
         try
         {
+            connection.Send("Enter your username: ");
+            string username = connection.ReadLine();
+            connection.Send("You will be chatting as " + username);
+            connections.Add(connection);
+
             while ( true )
             {
                 var message = connection.ReadLine( );
 
-                connection.Send( "thanks!" );
+                foreach (NetworkConnection c in connections)
+                {
+                    c.Send($"{username}: {message}");
+                }
             }
         }
         catch ( Exception )
