@@ -128,7 +128,7 @@ public sealed class NetworkConnection : IDisposable
     /// </summary>
     public void Disconnect( )
     {
-        if (!IsConnected)
+        if (IsConnected)
         {
             _tcpClient.Dispose();
         }
