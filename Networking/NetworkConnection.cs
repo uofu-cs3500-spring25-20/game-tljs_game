@@ -36,14 +36,14 @@ public sealed class NetworkConnection : IDisposable
     /// <param name="tcpClient">
     ///   An already existing TcpClient
     /// </param>
-    public NetworkConnection( TcpClient tcpClient )
+    public NetworkConnection(TcpClient tcpClient)
     {
         _tcpClient = tcpClient;
-        if ( IsConnected )
+        if (IsConnected)
         {
             // Only establish the reader/writer if the provided TcpClient is already connected.
-            _reader = new StreamReader( _tcpClient.GetStream(), Encoding.UTF8 );
-            _writer = new StreamWriter( _tcpClient.GetStream(), Encoding.UTF8 ) { AutoFlush = true }; // AutoFlush ensures data is sent immediately
+            _reader = new StreamReader(_tcpClient.GetStream(), Encoding.UTF8);
+            _writer = new StreamWriter(_tcpClient.GetStream(), Encoding.UTF8) { AutoFlush = true }; // AutoFlush ensures data is sent immediately
         }
     }
 
@@ -53,8 +53,8 @@ public sealed class NetworkConnection : IDisposable
     ///     Create a network connection object.  The tcpClient will be unconnected at the start.
     ///   </para>
     /// </summary>
-    public NetworkConnection( )
-        : this( new TcpClient( ) )
+    public NetworkConnection()
+        : this(new TcpClient())
     {
     }
 
@@ -75,9 +75,9 @@ public sealed class NetworkConnection : IDisposable
     /// </summary>
     /// <param name="host"> The URL or IP address, e.g., www.cs.utah.edu, or  127.0.0.1. </param>
     /// <param name="port"> The port, e.g., 11000. </param>
-    public void Connect( string host, int port )
+    public void Connect(string host, int port)
     {
-        _tcpClient.Connect( host, port );
+        _tcpClient.Connect(host, port);
         _reader = new StreamReader(_tcpClient.GetStream(), Encoding.UTF8);
         _writer = new StreamWriter(_tcpClient.GetStream(), Encoding.UTF8) { AutoFlush = true }; // AutoFlush ensures data is sent immediately
     }
@@ -92,7 +92,7 @@ public sealed class NetworkConnection : IDisposable
     ///   connected), throw an InvalidOperationException. HOW IS THE EG EVER TRIGGERED?
     /// </summary>
     /// <param name="message"> The string of characters to send. </param>
-    public void Send( string message )
+    public void Send(string message)
     {
         try
         {
@@ -111,27 +111,37 @@ public sealed class NetworkConnection : IDisposable
     ///   all characters up to the first new line. See <see cref="Send"/>.
     ///   If this operation can not be completed (e.g. because this NetworkConnection is not
     ///   connected), throw an InvalidOperationException.
-    /// </summary>
+    /// </summary>  
     /// <returns> The contents of the message. </returns>
     public string ReadLine()
     {
-        string? line = _reader?.ReadLine();
-        
-        if(line != null)
+        string? line = string.Empty;
+        try
         {
-            return line;
+            line = _reader?.ReadLine();
+
+            if (line != null)
+            {
+                return line;
+            }
         }
-        throw new InvalidOperationException("still not working");
+        catch (Exception)
+        {
+            throw new InvalidOperationException("still not working");
+        }
+        return line!;
     }
 
     /// <summary>
     ///   If connected, disconnect the connection and clean 
     ///   up (dispose) any streams.
     /// </summary>
-    public void Disconnect( )
+    public void Disconnect()
     {
         if (IsConnected)
         {
+            _writer?.Dispose();
+            _reader?.Dispose();
             _tcpClient.Close();
         }
     }
@@ -139,7 +149,7 @@ public sealed class NetworkConnection : IDisposable
     /// <summary>
     ///   Automatically called with a using statement (see IDisposable)
     /// </summary>
-    public void Dispose( )
+    public void Dispose()
     {
         Disconnect();
     }
