@@ -103,6 +103,7 @@
     {
         try
         {
+            network = new NetworkConnection();
             network.Connect( ServerNameOrAddress, ServerPort );
 
             // Communicating with the server needs to be asynchronous so that the UI thread 
@@ -125,9 +126,12 @@
                     catch
                     {
                         // add anything needed here to handle a disconnection from the server
+                        // ?
                     }
                 }
             } ).Start();
+
+            AllMessages = new();
         }
         catch
         {

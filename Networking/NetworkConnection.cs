@@ -89,7 +89,7 @@ public sealed class NetworkConnection : IDisposable
     ///   This method should attach a newline to the end of the <paramref name="message"/>
     ///   (by using WriteLine).
     ///   If this operation can not be completed (e.g. because this NetworkConnection is not
-    ///   connected), throw an InvalidOperationException.
+    ///   connected), throw an InvalidOperationException. HOW IS THE EG EVER TRIGGERED?
     /// </summary>
     /// <param name="message"> The string of characters to send. </param>
     public void Send( string message )
@@ -132,7 +132,7 @@ public sealed class NetworkConnection : IDisposable
     {
         if (IsConnected)
         {
-            _tcpClient.Dispose();
+            _tcpClient.Close();
         }
     }
 

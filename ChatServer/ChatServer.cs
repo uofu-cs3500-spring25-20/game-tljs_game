@@ -67,6 +67,11 @@ public partial class ChatServer
         catch ( Exception )
         {
             // do anything necessary to handle a disconnected client in here
+            // is connection.dispose/close/disconnect even necessary?
+            lock (connection)
+            {
+                connections.Remove(connection); // does this need a lock? yes but why
+            }
         }
     }
 }

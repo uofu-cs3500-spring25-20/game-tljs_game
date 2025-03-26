@@ -31,7 +31,7 @@ public static class Server
         while (true)
         {
             TcpClient client = listener.AcceptTcpClient();
-            new Thread(() => handleConnect(new NetworkConnection(client))).Start();
+            new Thread(() => handleConnect(new NetworkConnection(client))).Start(); // no reference so it is automatically disposed
         }
     }
 }
