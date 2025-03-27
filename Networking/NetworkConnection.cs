@@ -115,21 +115,14 @@ public sealed class NetworkConnection : IDisposable
     /// <returns> The contents of the message. </returns>
     public string ReadLine()
     {
-        string? line = string.Empty;
         try
         {
-            line = _reader?.ReadLine();
-
-            if (line != null)
-            {
-                return line;
-            }
+            return _reader!.ReadLine() ?? throw new InvalidOperationException();
         }
         catch (Exception)
         {
             throw new InvalidOperationException("still not working");
         }
-        return line!;
     }
 
     /// <summary>
