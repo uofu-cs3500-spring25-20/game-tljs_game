@@ -71,13 +71,13 @@ public partial class ChatServer
             List<NetworkConnection> connectionsCopy;
             lock (connection)
             {
-                connectionsCopy = connections.ToList();
                 connections.Remove(connection); // does this need a lock? yes but why
+                connectionsCopy = connections.ToList();
             }
 
             foreach (NetworkConnection c in connectionsCopy)
             {
-                c.Send("Some loser left");
+                c.Send("A client left the chatroom.");
             }
 
         }
