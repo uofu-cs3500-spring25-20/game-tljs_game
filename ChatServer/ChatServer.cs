@@ -13,7 +13,7 @@ namespace CS3500.Chatting;
 /// </summary>
 public partial class ChatServer
 {
-    private static List<NetworkConnection> connections = new();
+    private static Dictionary<NetworkConnection, string> connections = new();
 
     /// <summary>
     ///   The main program.
@@ -45,7 +45,7 @@ public partial class ChatServer
 
             lock (connection)
             {
-                connections.Add(connection);
+                connections.Add(connection, username);
             }
 
             while (true)
@@ -56,7 +56,7 @@ public partial class ChatServer
 
                 lock (connection)
                 {
-                    connectionsCopy = connections.ToList();
+                    connectionsCopy = connections.Keys.ToList();
                 }
                 foreach (NetworkConnection c in connectionsCopy)
                 {
@@ -69,15 +69,16 @@ public partial class ChatServer
             // do anything necessary to handle a disconnected client in here
             // is connection.dispose/close/disconnect even necessary?
             List<NetworkConnection> connectionsCopy;
+            string username = connections[connection];
             lock (connection)
             {
                 connections.Remove(connection); // does this need a lock? yes but why
-                connectionsCopy = connections.ToList();
+                connectionsCopy = connections.Keys.ToList();
             }
 
             foreach (NetworkConnection c in connectionsCopy)
             {
-                c.Send("A client left the chatroom.");
+                c.Send($"{username} left the chatroom.");
             }
 
         }
