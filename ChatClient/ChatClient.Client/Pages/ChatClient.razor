@@ -32,7 +32,7 @@
 
     <div class="input-row">
         <label for="message"> Chat: </label>
-        <input id="message" class="@grayedOut" disabled="@(disconnected)" value = "@message" type="text" @onchange="HandleSendMessage" />
+        <input id="message" class="@grayedOut" disabled="@(disconnected)" @bind-value:event="oninput" @bind-value="@input" type="text" @onchange="HandleSendMessage" />
     </div>
     <div class="input-row">
         <div class="input-col">
@@ -48,7 +48,6 @@
         </div>
     </div>
 </div>
-
 
 @code
 {
@@ -83,8 +82,11 @@
     /// </summary>
     private List<string> AllMessages = new();
 
-    private string? message;
-
+    /// <summary>
+    /// A string that is binded to the value of the text input, so that it can be reset after
+    /// the user enters a message.
+    /// </summary>
+    private string? input;
 
     /// <summary>
     /// Disconnect the network object from the server.
@@ -149,12 +151,7 @@
         if ( e.Value != null )
         {
             network.Send( $"{e.Value}" );
-            if (message == null) {
-                message = "";
-            }
-            else {
-                message = null!;
-            }
+            input = "";
         }
     }
 
