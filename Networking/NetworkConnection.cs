@@ -1,6 +1,8 @@
 ﻿// <copyright file="NetworkConnection.cs" company="UofU-CS3500">
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
+// <authors> Thomas Lu and Jakob Stabile </authors>
+// <version> 03.27.2025 </version>
 
 using System.Net.Sockets;
 using System.Text;
@@ -68,7 +70,6 @@ public sealed class NetworkConnection : IDisposable
             return _tcpClient.Connected;
         }
     }
-
 
     /// <summary>
     ///   Try to connect to the given host:port. 

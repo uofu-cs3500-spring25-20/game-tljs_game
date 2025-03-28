@@ -1,8 +1,9 @@
 ﻿// <copyright file="Server.cs" company="UofU-CS3500">
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
+// <authors> Thomas Lu and Jakob Stabile </authors>
+// <version> 03.27.2025 </version>
 
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 

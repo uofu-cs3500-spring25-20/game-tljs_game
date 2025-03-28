@@ -1,19 +1,24 @@
 ﻿// <copyright file="ChatServer.cs" company="UofU-CS3500">
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
+// <authors> Thomas Lu and Jakob Stabile </authors>
+// <version> 03.27.2025 </version>
 
 using CS3500.Networking;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CS3500.Chatting;
 
 /// <summary>
-///   A simple ChatServer that handles clients separately and replies with a static message.
+///   An upgraded ChatServer that handles clients separately and relays a message from a client
+///   to all other connected clients, akin to a chatroom.
 /// </summary>
 public partial class ChatServer
 {
-    private static Dictionary<NetworkConnection, string> connections = new();
+
+    /// <summary>
+    /// Storage for all NetworkConnections and the username of the connection
+    /// </summary>
+    private static Dictionary<NetworkConnection, string> connections = [];
 
     /// <summary>
     ///   The main program.
@@ -25,7 +30,6 @@ public partial class ChatServer
         Server.StartServer(HandleConnect, 11_000);
         Console.Read(); // don't stop the program.
     }
-
 
     /// <summary>
     ///   <pre>
@@ -67,12 +71,11 @@ public partial class ChatServer
         catch (Exception)
         {
             // do anything necessary to handle a disconnected client in here
-            // is connection.dispose/close/disconnect even necessary?
             List<NetworkConnection> connectionsCopy;
             string username = connections[connection];
             lock (connection)
             {
-                connections.Remove(connection); // does this need a lock? yes but why
+                connections.Remove(connection);
                 connectionsCopy = connections.Keys.ToList();
             }
 
