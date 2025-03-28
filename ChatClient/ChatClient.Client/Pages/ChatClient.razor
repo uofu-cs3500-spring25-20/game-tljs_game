@@ -32,7 +32,7 @@
 
     <div class="input-row">
         <label for="message"> Chat: </label>
-        <input id="message" class="@grayedOut" disabled="@(disconnected)" @bind-value:event="oninput" @bind-value="@input" type="text" @onchange="HandleSendMessage" />
+        <input id="message" class="@grayedOut" disabled="@(disconnected)" @bind-value:event="oninput" @bind-value="@input" type="text" @onkeydown="@Enter" />
     </div>
     <div class="input-row">
         <div class="input-col">
@@ -139,6 +139,16 @@
             // add anything needed here to handle a failure to connect
         }
 
+    }
+
+    private void Enter ( KeyboardEventArgs e) {
+        if (e.Code == "Enter")
+        {
+            if (input != null) {
+                network.Send($"{input}");
+                input = "";
+            }
+        }
     }
 
     /// <summary>
